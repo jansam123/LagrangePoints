@@ -82,17 +82,14 @@ def run_plotly(
     )
     fig.update_layout(scene=dict(
         xaxis=dict(
-            # backgroundcolor="white",
             gridcolor="white",
             showbackground=False,
             zerolinecolor="white",),
         yaxis=dict(
-            # backgroundcolor="white",
             gridcolor="white",
             showbackground=False,
             zerolinecolor="white"),
         zaxis=dict(
-            # backgroundcolor="white",
             gridcolor="white",
             showbackground=False,
             zerolinecolor="white",
