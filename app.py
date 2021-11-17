@@ -2,7 +2,6 @@ import dash
 from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
-import plotly.express as px
 from lagrange_points import *
 
 app = dash.Dash(__name__)
