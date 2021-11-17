@@ -1,10 +1,6 @@
 import plotly.graph_objects as go
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.colors as colors
-from scipy.signal import argrelextrema
-from matplotlib import ticker, cm
-from scipy.optimize import minimize
 import operator as op
 
 

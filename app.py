@@ -3,7 +3,6 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 import plotly.express as px
-from scipy.signal.signaltools import choose_conv_method
 from lagrange_points import *
 
 df = px.data.iris()
