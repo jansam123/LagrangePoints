@@ -10,7 +10,7 @@ df = px.data.iris()
 app = dash.Dash(__name__)
 server = app.server
 app.title = 'Lagrange Points'
-
+lagrange-points
 m1 = 1
 m2 = 3
 a = 1.2
@@ -23,7 +23,6 @@ distance_table = {'Earth_Sun': 147.99e9, 'Jupiter_Sun': 748.9e9, 'Saturn_Sun': 1
 
 M, alpha, omega2 = variable_setup(m1, m2, a, G)
 _, _, Z_lag_points = Lag_points(a, alpha, omega2, M, G)
-
 
 @app.callback([
     Output("zrange-slider", "min"),
