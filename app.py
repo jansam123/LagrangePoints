@@ -9,6 +9,7 @@ df = px.data.iris()
 
 app = dash.Dash(__name__)
 server = app.server
+
 app.title = 'Lagrange Points'
 m1 = 1
 m2 = 3
