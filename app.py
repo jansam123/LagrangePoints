@@ -9,8 +9,9 @@ df = px.data.iris()
 
 app = dash.Dash(__name__)
 server = app.server
-
 app.title = 'Lagrange Points'
+
+
 m1 = 1
 m2 = 3
 a = 1.2
@@ -23,6 +24,7 @@ distance_table = {'Earth_Sun': 147.99e9, 'Jupiter_Sun': 748.9e9, 'Saturn_Sun': 1
 
 M, alpha, omega2 = variable_setup(m1, m2, a, G)
 _, _, Z_lag_points = Lag_points(a, alpha, omega2, M, G)
+
 
 @app.callback([
     Output("zrange-slider", "min"),
@@ -65,17 +67,15 @@ def add_value_slider(m1, m2, a, G, n_clicks):
     Output("m1_input", "value"),
     Output("m2_input", "value"),
     Output("a_input", "value"),
-    ],
+],
     [
         Input("a_dropdown", "value"),
-    ])
+])
 def set_m(name):
     if name != '-' and name in distance_table:
         return mass_table[name.split('_')[0]], mass_table[name.split('_')[1]], distance_table[name]
     else:
         return m1, m2, a
-
-
 
 
 @app.callback(
@@ -187,6 +187,7 @@ def plotly_figure(zrange, m1, m2, a, G, checklist):
                      )
 
     return fig
+
 
 if __name__ == '__main__':
     app.run_server()
