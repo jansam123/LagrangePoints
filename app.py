@@ -188,5 +188,5 @@ def plotly_figure(zrange, m1, m2, a, G, checklist):
 
     return fig
 
-
-app.run_server()
+if __name__ == '__main__':
+    app.run_server()
