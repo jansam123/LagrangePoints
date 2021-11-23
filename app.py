@@ -3,6 +3,7 @@ from dash import dcc
 from dash import html
 from dash.dependencies import Input, Output
 from lagrange_points import *
+from HTMLElements import NumberInput, MassCombinationDropdown, LpChecklist
 
 app = dash.Dash(__name__)
 server = app.server
@@ -94,62 +95,25 @@ app.layout = html.Div([
     html.Div([
         html.Hr(),
         html.H5("Smaller mass [kg]"),
-        dcc.Input(
-            id="m1_input",
-            type="number",
-            placeholder="Input mass m1",
-            value=m1,
-        ),
+        NumberInput('m1', m1),
         html.Hr(),
         html.H5("Bigger mass [kg]"),
-        dcc.Input(
-            id="m2_input",
-            type="number",
-            placeholder="Input mass m2",
-            value=m2,
-        ),
+        NumberInput('m2', m2),
         html.Hr(),
         html.H5("Distance between masses [m]"),
-        dcc.Input(
-            id="a_input",
-            type="number",
-            placeholder="Input distance a",
-            value=a,
-        ),
-        dcc.Dropdown(
-            id='a_dropdown',
-            options=[
-                {'label': 'Jupiter_Sun', 'value': 'Jupiter_Sun'},
-                {'label': 'Saturn_Sun', 'value': 'Saturn_Sun'},
-                {'label': 'Earth_Sun', 'value': 'Earth_Sun'},
-                {'label': 'Moon_Earth', 'value': 'Moon_Earth'},
-                {'label': 'Manual', 'value': '-'}
-            ],
-            value='-'
-        ),
+        NumberInput('a', a),
+        MassCombinationDropdown(),
         html.Hr(),
         html.H5("G [m3 kg-1 s-2]"),
-        dcc.Input(
-            id="G_input",
-            type="number",
-            placeholder="Input gravitational constat G",
-            value=G,
-        ),
+        NumberInput('G', G),
         html.Button('Real value of G', id='reset-G', n_clicks=0),
         html.Hr(),
         html.P("z-axis range:"),
-        dcc.RangeSlider(
-            id='zrange-slider'),
+        dcc.RangeSlider(id='zrange-slider'),
         html.Button('Reset', id='reset-zaxis', n_clicks=0),
         html.Hr(),
         html.Hr(),
-        dcc.Checklist(
-            id="checklist",
-            options=[
-                {'label': 'Show Lagrange Points', 'value': 'LP'}
-            ],
-            value=['LP']
-        ),
+        LpChecklist(),
     ], className="three columns"),
     html.Footer([
         html.P("© Samuel Jankovych"),
