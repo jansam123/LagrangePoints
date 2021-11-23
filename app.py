@@ -93,7 +93,7 @@ def set_m(n_clicks):
         Input("m2_input", "value"),
         Input("a_input", "value"),
         Input("G_input", "value"),
-        Input("points_toggle", "value"),
+        Input("points_toggle", "on"),
 
     ])
 def plotly_figure(zrange, m1, m2, a, G, points):

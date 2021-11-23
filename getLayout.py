@@ -48,11 +48,11 @@ def getLayout(distance_table):
         html.Button('Reset z-axis', id='resetZaxis_button', n_clicks=0),
         html.Hr(),
         html.Hr(),
-        daq.ToggleSwitch(
+        daq.BooleanSwitch(
             id='points_toggle',
             label='Show Lagrage points',
             labelPosition='bottom',
-            value=True
+            on=True
         ),
     ], className="three columns")
 
