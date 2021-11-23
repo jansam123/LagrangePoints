@@ -1,9 +1,10 @@
 import dash
 from dash import dcc
 from dash import html
+import dash_daq as daq
 from dash.dependencies import Input, Output
-from lagrange_points import *
-from HTMLElements import NumberInput, MassCombinationDropdown, LpChecklist
+from LagrangePoints import LagPlot, variable_setup
+from getLayout import getLayout
 
 app = dash.Dash(__name__)
 server = app.server
@@ -14,19 +15,19 @@ m2 = 3
 a = 1.2
 G = 1
 
+distance_table = {'Earth Sun': 147.99e9, 'Jupiter Sun': 748.9e9, 'Saturn Sun': 1483e10, 'Moon Earth': 384e6,
+                  'Manual Entry': 1.2}
 mass_table = {'Earth': 5.972e24, 'Saturn': 5.683e26,
-              'Jupiter': 1.898e27, 'Sun': 1.989e30, 'Moon': 7.34767309e22}
-distance_table = {'Earth_Sun': 147.99e9, 'Jupiter_Sun': 748.9e9, 'Saturn_Sun': 1483e10, 'Moon_Earth': 384e6
-                  }
+              'Jupiter': 1.898e27, 'Sun': 1.989e30, 'Moon': 7.34767309e22, 'Manual': 1, 'Entry': 3}
 
-M, alpha, omega2 = variable_setup(m1, m2, a, G)
-_, _, Z_lag_points = Lag_points(a, alpha, omega2, M, G)
+
+mainPlot = LagPlot()
 
 
 @app.callback([
-    Output("zrange-slider", "min"),
-    Output("zrange-slider", "max"),
-    Output("zrange-slider", "step"),
+    Output("zrange_slider", "min"),
+    Output("zrange_slider", "max"),
+    Output("zrange_slider", "step"),
 ],
     [
         Input("m1_input", "value"),
@@ -36,26 +37,26 @@ _, _, Z_lag_points = Lag_points(a, alpha, omega2, M, G)
 ])
 def add_min_max_step(m1, m2, a, G):
 
-    M, alpha, _ = variable_setup(m1, m2, a, G)
-    min = -8*alpha*G*M/a
-    max = 8*alpha*G*M/a
-    step = 0.1*alpha*G*M/a
+    scale_factor = variable_setup(m1, m2, a, G)[-1]
+    min = -8*scale_factor
+    max = 8*scale_factor
+    step = 0.1*scale_factor
     return min, max, step
 
 
 @app.callback(
-    Output("zrange-slider", "value"),
+    Output("zrange_slider", "value"),
     [
         Input("m1_input", "value"),
         Input("m2_input", "value"),
         Input("a_input", "value"),
         Input("G_input", "value"),
-        Input('reset-zaxis', 'n_clicks'),
+        Input('resetZaxis_button', 'n_clicks'),
     ])
 def add_value_slider(m1, m2, a, G, n_clicks):
-    M, alpha, _ = variable_setup(m1, m2, a, G)
-    value1 = -3*alpha*G*M/a
-    value2 = 0*alpha*G*M/a
+    scale_factor = variable_setup(m1, m2, a, G)[-1]
+    value1 = -3*scale_factor
+    value2 = 0*scale_factor
 
     return value1, value2
 
@@ -69,10 +70,7 @@ def add_value_slider(m1, m2, a, G, n_clicks):
         Input("a_dropdown", "value"),
 ])
 def set_m(name):
-    if name != '-' and name in distance_table:
-        return mass_table[name.split('_')[0]], mass_table[name.split('_')[1]], distance_table[name]
-    else:
-        return m1, m2, a
+    return mass_table[name.split(' ')[0]], mass_table[name.split(' ')[1]], distance_table[name]
 
 
 @app.callback(
@@ -87,67 +85,46 @@ def set_m(n_clicks):
         return 6.67408e-11
 
 
-app.layout = html.Div([
-    html.Div([
-        dcc.Graph(id="scatter-plot",
-                  style={'height': '100vh'}),
-    ], className="nine columns"),
-    html.Div([
-        html.Hr(),
-        html.H5("Smaller mass [kg]"),
-        NumberInput('m1', m1),
-        html.Hr(),
-        html.H5("Bigger mass [kg]"),
-        NumberInput('m2', m2),
-        html.Hr(),
-        html.H5("Distance between masses [m]"),
-        NumberInput('a', a),
-        MassCombinationDropdown(),
-        html.Hr(),
-        html.H5("G [m3 kg-1 s-2]"),
-        NumberInput('G', G),
-        html.Button('Real value of G', id='reset-G', n_clicks=0),
-        html.Hr(),
-        html.P("z-axis range:"),
-        dcc.RangeSlider(id='zrange-slider'),
-        html.Button('Reset', id='reset-zaxis', n_clicks=0),
-        html.Hr(),
-        html.Hr(),
-        LpChecklist(),
-    ], className="three columns"),
-    html.Footer([
-        html.P("© Samuel Jankovych"),
-    ])
-])
-
-
 @app.callback(
     Output("scatter-plot", "figure"),
     [
-        Input("zrange-slider", "value"),
+        Input("zrange_slider", "value"),
         Input("m1_input", "value"),
         Input("m2_input", "value"),
         Input("a_input", "value"),
         Input("G_input", "value"),
-        Input("checklist", "value"),
+        Input("points_toggle", "value"),
 
     ])
-def plotly_figure(zrange, m1, m2, a, G, checklist):
+def plotly_figure(zrange, m1, m2, a, G, points):
     zmin, zmax = zrange
-    show_LP = True if 'LP' in checklist else False
 
-    M, alpha, omega2 = variable_setup(m1, m2, a, G)
-    X, Y, Z = coordinates(a, alpha, omega2, M, G)
-    X_lag_points, Y_lag_points, Z_lag_points = Lag_points(
-        a, alpha, omega2, M, G)
-    fig = run_plotly(X, Y, Z,  X_lag_points, Y_lag_points, Z_lag_points,
-                     zmin=zmin,
-                     zmax=zmax,
-                     show_LP=show_LP
-                     )
+    mainPlot.fig.data = []
+    mainPlot.update_physical_variables(m1, m2, a, G)
+    mainPlot.update_LagPoints()
+    mainPlot.update_coordinates()
+    mainPlot.update_plot(zmin, mainPlot.lagPoints[2][0])
+    mainPlot.update_VeffAxis(zmin, zmax)
+    if points:
+        mainPlot.add_LagPoints()
 
-    return fig
+    return mainPlot.fig
 
+
+graph = dcc.Graph(id="scatter-plot",
+                  style={'height': '100vh'})
+
+footer = html.Footer([
+    html.P("© Samuel Jankovych"),
+])
+
+app.layout = html.Div([
+    html.Div([
+        graph,
+    ], className="nine columns"),
+    getLayout(distance_table),
+    footer
+])
 
 if __name__ == '__main__':
     app.run_server()

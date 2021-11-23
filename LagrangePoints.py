@@ -35,29 +35,37 @@ def calculate_LagPoints_coordinates(a, alpha, omega2, M, G):
     return X_lag_points, Y_lag_points, Z_lag_points
 
 
+def variable_setup(m1, m2, a, G):
+    M = m1 + m2
+    alpha = m2/M
+    omega2 = G*M/a**3
+    scale_factor = alpha*G*M/a
+    return M, alpha, omega2, scale_factor
+
+
 class LagPlot:
 
-    def __init__(self, m1, m2, a, G) -> None:
-        self.fig = go.Figure(layout=go.Layout(title="Lagrange points"))
-        self.update_variables(m1, m2, a, G)
-        self.update_points()
+    def __init__(self) -> None:
+        self.fig = go.Figure(layout=go.Layout(
+            title="Lagrange points"))
+        self.set_basic_camera()
 
-    def update_plot(self, X, Y, Z, color_min, color_max, contour_start, contour_end, contour_size):
-
-        contour_setup = {"z": {"show": True, "start": contour_start,
-                               "end": contour_end, "size": contour_size, "color": "white"}}
+    def update_plot(self, color_min, color_max):
+        X, Y, Z = self.coordinates
+        contour_setup = {"z": {"show": True, "start": self.lagPoints[2].min(),
+                               "end": self.lagPoints[2].max(), "size": (self.lagPoints[2].max()-self.lagPoints[2].min())/4, "color": "white"}}
         self.fig.add_trace(go.Surface(z=Z, x=X, y=Y, cmin=color_min,
                            cmax=color_max, contours=contour_setup, colorscale='turbo'))
 
     def add_LagPoints(self, size=13, color=[130, 230, 240]):
         marker = dict(
             size=size,
-            color=[color for _ in range(4)],
+            color=[color for _ in range(5)],
         )
         self.fig.add_trace(go.Scatter3d(
-            x=self.lagPoints[0], y=self.lagPoints[0], z=self.lagPoints[0], mode='markers', marker=marker))
+            x=self.lagPoints[0], y=self.lagPoints[1], z=self.lagPoints[2], mode='markers', marker=marker))
 
-    def set_VeffAxis(self, zmin, zmax):
+    def update_VeffAxis(self, zmin, zmax):
         self.fig.update_layout(
             scene=dict(
                 xaxis={'title': 'X', 'autorange': True},
@@ -77,7 +85,8 @@ class LagPlot:
                 gridcolor="white",
                 showbackground=False,
                 zerolinecolor="white",
-            ),)
+            ),),
+            uirevision='Default'
         )
 
     def set_basic_camera(self):
@@ -89,9 +98,7 @@ class LagPlot:
         self.fig.update_layout(scene_camera=camera)
 
     def update_physical_variables(self, m1, m2, a, G):
-        M = m1 + m2
-        alpha = m2/M
-        omega2 = G*M/a**3
+        M, alpha, omega2, _ = variable_setup(m1, m2, a, G)
         self.__phys_parameters = {'m1': m1, 'a': a, 'G': G,
                                   'm2': m2, 'M': M, 'alpha': alpha, 'omega2': omega2}
 
@@ -99,3 +106,18 @@ class LagPlot:
         self.lagPoints = calculate_LagPoints_coordinates(
             self.__phys_parameters['a'], self.__phys_parameters['alpha'], self.__phys_parameters['omega2'],
             self.__phys_parameters['M'], self.__phys_parameters['G'])
+
+    def update_coordinates(self):
+        a = self.__phys_parameters['a']
+        alpha = self.__phys_parameters['alpha']
+        G = self.__phys_parameters['G']
+        M = self.__phys_parameters['M']
+        omega2 = self.__phys_parameters['omega2']
+
+        square = 3*a
+        x = np.linspace(-square, square, 100)
+        y = np.linspace(-square, square, 100)
+        X, Y = np.meshgrid(x, y)
+        Z = potential(X, Y, alpha, a, omega2, M, G)
+
+        self.coordinates = [X, Y, Z]
