@@ -143,7 +143,7 @@ class LagPlot:
             square = square_factor*alpha*a
         elif dim == 2:
             square = (max(self.lagPoints[0]) + factor)
-        self.refinement = 300
+        self.refinement = 100
         x = np.linspace(-square, square, self.refinement)
         y = np.linspace(-square, square, self.refinement)
         X, Y = np.meshgrid(x, y)
