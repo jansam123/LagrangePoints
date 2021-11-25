@@ -3,8 +3,8 @@ from dash import dcc
 from dash import html
 import dash_daq as daq
 from dash.dependencies import Input, Output
-from LagrangePoints import LagPlot, variable_setup
-from getLayout import getLayout
+from LagrangePoints import LagPlot, variable_setup, calculate_LagPoints_coordinates
+from getLayout import getMainLayout, getButtonLayout
 
 app = dash.Dash(__name__)
 server = app.server
@@ -38,8 +38,8 @@ mainPlot = LagPlot()
 def add_min_max_step(m1, m2, a, G):
 
     scale_factor = variable_setup(m1, m2, a, G)[-1]
-    min = -8*scale_factor
-    max = 8*scale_factor
+    min = -4*scale_factor
+    max = 1*scale_factor
     step = 0.1*scale_factor
     return min, max, step
 
@@ -94,37 +94,40 @@ def set_m(n_clicks):
         Input("a_input", "value"),
         Input("G_input", "value"),
         Input("points_toggle", "on"),
-
+        Input("dim_toggle", "value"),
     ])
-def plotly_figure(zrange, m1, m2, a, G, points):
+def plotly_figure(zrange, m1, m2, a, G, points, dim):
     zmin, zmax = zrange
 
     mainPlot.fig.data = []
     mainPlot.update_physical_variables(m1, m2, a, G)
     mainPlot.update_LagPoints()
-    mainPlot.update_coordinates()
-    mainPlot.update_plot(zmin, mainPlot.lagPoints[2][0])
-    mainPlot.update_VeffAxis(zmin, zmax)
-    if points:
-        mainPlot.add_LagPoints()
+    if dim:
+        mainPlot.update_coordinates(2.5, 3)
+        mainPlot.update_3Dplot(zmin, mainPlot.lagPoints[2][0])
+        mainPlot.update_VeffAxis(zmin, zmax)
+        if points:
+            mainPlot.add_3DLagPoints()
+    else:
+        mainPlot.update_coordinates(2.3, 2)
+        mainPlot.update_2Dplot(zmin, mainPlot.lagPoints[2][0])
+        if points:
+            mainPlot.add_2DLagPoints()
 
     return mainPlot.fig
 
 
-graph = dcc.Graph(id="scatter-plot",
-                  style={'height': '100vh'})
+graph = dcc.Graph(id="scatter-plot", style={'height': '95vh'})
 
 footer = html.Footer([
     html.P("© Samuel Jankovych"),
 ])
 
 app.layout = html.Div([
-    html.Div([
-        graph,
-    ], className="nine columns"),
-    getLayout(distance_table),
+    html.Div([*getButtonLayout(), graph], className="nine columns"),
+    html.Div(getMainLayout(distance_table), className="three columns"),
     footer
 ])
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(debug=True)

@@ -3,9 +3,16 @@ from dash import html
 import dash_daq as daq
 
 
-def getLayout(distance_table):
+def getMainLayout(distance_table):
 
-    return html.Div([
+    return [
+        html.Hr(),
+        html.Tbody([
+        html.Tr([
+            html.Td(html.H6("2D")),
+            html.Td(daq.ToggleSwitch(id='dim_toggle', value=True)),
+            html.Td(html.H6("3D")),
+        ])]),
         html.Hr(),
         html.H5("Smaller mass [kg]"),
         dcc.Input(
@@ -42,20 +49,29 @@ def getLayout(distance_table):
         ),
         html.Button('Real value of G', id='reset-G', n_clicks=0),
         html.Hr(),
-        html.P("z-axis range:"),
+        html.P("Height of the potential (z-axis range)"),
         dcc.RangeSlider(
             id='zrange_slider'),
-        html.Button('Reset z-axis', id='resetZaxis_button', n_clicks=0),
+        html.Button('Reset potential (z-axis)',
+                    id='resetZaxis_button', n_clicks=0),
         html.Hr(),
         html.Hr(),
-        daq.BooleanSwitch(
-            id='points_toggle',
-            label='Show Lagrage points',
-            labelPosition='bottom',
-            on=True
-        ),
-    ], className="three columns")
+        html.P("If you want to see exact coordinates of Lagrange points, hover over points with your mouse."),
+        html.Tr([
+        html.Td(html.P("Show Lagrage points")),
+        html.Td(daq.BooleanSwitch(id='points_toggle',on=True))
+        ]),
+    ]
 
 
+def getButtonLayout():
+    info_button_style = {
+        'background-color':  'green',
+        'color': 'white',
+        'font-size':15,
 
-
+    }  
+    return [
+        html.Button('INFO',
+                    id='info_page', n_clicks=1, style=info_button_style),
+    ]
