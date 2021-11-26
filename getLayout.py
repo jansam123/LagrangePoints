@@ -72,5 +72,5 @@ def getButtonLayout():
     return [
         html.Button(dcc.Link('INFO', href='#info', target="_top", style={"color": "white", "text-decoration": "none"
                                                                          }),
-                    id='info_page', n_clicks=1, style=info_button_style),
+                    id='info_page', n_clicks=0, style=info_button_style),
     ]
