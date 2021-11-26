@@ -6,12 +6,15 @@ The effective potential is given by
 
 where M = m1 + m2 is the sum of masses, a is the distance between masses, alpha = m2/M, G is gravitational contatnt and x, y are coordinates.
 The angular frequency omega is given by Kepler's law
+
 <img src="./assets/images/kepler.jpg" width="100">
 
 Coordinates of Lagrange points L4 and L5 are given by
+
 <img src="./assets/images/Ly.jpg" width="200">
 
 y coordinates of Lagrange points L1, L2 and L3 are all y = 0 and x coordinates as a solutions to equation
+
 <img src="./assets/images/Lx.jpg" width="400">
 
 This potential includes gravitational force between masses and centrifugal force.

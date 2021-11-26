@@ -3,7 +3,7 @@ from dash import dcc
 from dash import html
 import dash_daq as daq
 from dash.dependencies import Input, Output
-from LagrangePoints import LagPlot, variable_setup, calculate_LagPoints_coordinates
+from LagrangePoints import LagPlot, variable_setup
 from getLayout import getMainLayout, getButtonLayout
 from about import getText
 
