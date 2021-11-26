@@ -56,7 +56,7 @@ class LagPlot:
         contour_setup = {"start": self.lagPoints[2].min(),
                          "end": self.lagPoints[2].max(), "size": (self.lagPoints[2].max()-self.lagPoints[2].min())/10}
         self.fig.add_trace(go.Contour(
-            z=Z, x=np.linspace(X.min(), X.max(), self.refinement), y=np.linspace(Y.min(), Y.max(), self.refinement), contours=contour_setup, colorscale='turbo'))
+            z=Z, x=np.linspace(X.min(), X.max(), self.refinement), y=np.linspace(Y.min(), Y.max(), self.refinement), contours=contour_setup, colorscale='turbo', colorbar=dict(title='Vef')))
         layout = go.Layout(
             plot_bgcolor='white'
         )
@@ -78,7 +78,7 @@ class LagPlot:
         contour_setup = {"z": {"show": True, "start": self.lagPoints[2].min(),
                                "end": self.lagPoints[2].max(), "size": (self.lagPoints[2].max()-self.lagPoints[2].min())/4, "color": "white"}}
         self.fig.add_trace(go.Surface(z=Z, x=X, y=Y, cmin=color_min,
-                           cmax=color_max, contours=contour_setup, colorscale='turbo'))
+                           cmax=color_max, contours=contour_setup, colorscale='turbo', colorbar=dict(title=r'Vef')))
 
     def add_3DLagPoints(self, size=13, color=[130, 230, 240]):
         marker = dict(
@@ -96,7 +96,7 @@ class LagPlot:
             scene=dict(
                 xaxis={'title': 'X', 'autorange': True},
                 yaxis={'title': 'Y', 'autorange': True},
-                zaxis={'title': 'V_ef', 'range': [zmin, zmax]})
+                zaxis={'title': 'Vef', 'range': [zmin, zmax]})
         )
         self.fig.update_layout(scene=dict(
             xaxis=dict(
@@ -155,3 +155,5 @@ class LagPlot:
         Z = potential(X, Y, alpha, a, omega2, M, G)
         
         self.coordinates = [X, Y, Z]
+
+
