@@ -67,8 +67,11 @@ class LagPlot:
             size=size,
             color='white',
         )
+        labels = [f'L{i}' for i in [5, 4, 2, 3, 1]]
         self.fig.add_trace(go.Scatter(
-            x=self.lagPoints[0], y=self.lagPoints[1], mode='markers', marker=marker))
+            x=self.lagPoints[0], y=self.lagPoints[1], mode='markers+text', marker=marker, text=labels, textposition='top center', textfont=dict(color='white', size=15)),)
+       
+
 
     def update_3Dplot(self, color_min, color_max):
         X, Y, Z = self.coordinates
@@ -82,8 +85,10 @@ class LagPlot:
             size=size,
             color=[color for _ in range(5)],
         )
+        labels = [f'L{i}' for i in [5, 4, 2, 3, 1]]
         self.fig.add_trace(go.Scatter3d(
-            x=self.lagPoints[0], y=self.lagPoints[1], z=self.lagPoints[2], mode='markers', marker=marker))
+            x=self.lagPoints[0], y=self.lagPoints[1], z=self.lagPoints[2], mode='markers+text', marker=marker,  
+            text=labels, textposition='top center', textfont=dict(color='black', size=15)))
         
 
     def update_VeffAxis(self, zmin, zmax):

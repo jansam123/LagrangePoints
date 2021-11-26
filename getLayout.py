@@ -6,7 +6,6 @@ import dash_daq as daq
 def getMainLayout(distance_table):
 
     return [
-        html.Hr(),
         html.P("Takes some time to switch..."),
         html.Tbody([
         html.Tr([
@@ -14,7 +13,6 @@ def getMainLayout(distance_table):
             html.Td(daq.ToggleSwitch(id='dim_toggle', value=True)),
             html.Td(html.H6("3D")),
         ])]),
-        html.Hr(),
         html.H5("Smaller mass [kg]"),
         dcc.Input(
             id="m1_input",
@@ -50,7 +48,7 @@ def getMainLayout(distance_table):
         ),
         html.Button('Real value of G', id='reset-G', n_clicks=0),
         html.Hr(),
-        html.P("Height of the potential (z-axis range)"),
+        html.H6("Height of the potential (z-axis range)"),
         dcc.RangeSlider(
             id='zrange_slider'),
         html.Button('Reset potential (z-axis)',
@@ -73,6 +71,7 @@ def getButtonLayout():
 
     }  
     return [
-        html.Button('INFO',
+        html.Button(dcc.Link('INFO', href='#info', target="_top", style={"color": "white", "text-decoration": "none"
+                                                                         }),
                     id='info_page', n_clicks=1, style=info_button_style),
     ]

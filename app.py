@@ -120,9 +120,6 @@ def plotly_figure(zrange, m1, m2, a, G, points, dim):
 
 graph = dcc.Graph(id="scatter-plot", style={'height': '95vh'})
 
-footer = html.Footer([
-    html.P("© Samuel Jankovych"),
-])
 
 app.layout = html.Div([
     html.Div([*getButtonLayout(), graph], className="nine columns"),
@@ -130,9 +127,9 @@ app.layout = html.Div([
     html.Div([
         html.Hr(),
         html.Hr(),
-        html.Hr(),
-        dcc.Markdown(getText())
-    ], className="twelve columns")
+        html.Hr(id='info'),
+        *getText(),
+    ], className="twelve columns"),
 ])
 
 if __name__ == '__main__':
