@@ -10,7 +10,7 @@ def getText():
     The effective potential is given by
     """)
     second_part = dcc.Markdown("""
-    where M = m1 + m2 is the sum of masses, a is the distance between masses, alpha = m2/M, G is gravitational contatnt and x, y are coordinates.
+    where M = m1 + m2 (m2 < m1) is the sum of masses, a is the distance between masses, alpha = m2/M, G is gravitational contatnt and x, y are coordinates.
     The angular frequency omega is given by Kepler's law
     """)
     middle_part = dcc.Markdown("""

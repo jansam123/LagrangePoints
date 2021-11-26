@@ -4,7 +4,7 @@ Simple interactive webpage displaying Lagrange points and effective potential of
 The effective potential is given by
 <img src="./assets/images/Veff.jpg" width="700">
 
-where M = m1 + m2 is the sum of masses, a is the distance between masses, alpha = m2/M, G is gravitational contatnt and x, y are coordinates.
+where M = m1 + m2 (m2 < m1) is the sum of masses, a is the distance between masses, alpha = m2/M, G is gravitational contatnt and x, y are coordinates.
 The angular frequency omega is given by Kepler's law
 
 <img src="./assets/images/kepler.jpg" width="100">
