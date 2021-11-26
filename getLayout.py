@@ -12,7 +12,7 @@ def getMainLayout(distance_table):
             html.Td(daq.ToggleSwitch(id='dim_toggle', value=True)),
             html.Td(html.H6("3D")),
         ])]),
-        html.H5("Smaller mass m2[kg]"),
+        html.H5("Smaller mass m2 [kg]"),
         dcc.Input(
             id="m1_input",
             type="number",
