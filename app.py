@@ -86,8 +86,10 @@ def set_m(n_clicks):
         return 6.67408e-11
 
 
-@app.callback(
+@app.callback([
     Output("scatter-plot", "figure"),
+    Output("zrange_slider", "disabled"),
+    ],
     [
         Input("zrange_slider", "value"),
         Input("m1_input", "value"),
@@ -109,13 +111,15 @@ def plotly_figure(zrange, m1, m2, a, G, points, dim):
         mainPlot.update_VeffAxis(zmin, zmax)
         if points:
             mainPlot.add_3DLagPoints()
+        disabled = False
     else:
         mainPlot.update_coordinates(2.3, 2)
         mainPlot.update_2Dplot(zmin, mainPlot.lagPoints[2][0])
         if points:
             mainPlot.add_2DLagPoints()
+        disabled = True
 
-    return mainPlot.fig
+    return mainPlot.fig, disabled
 
 
 graph = dcc.Graph(id="scatter-plot", style={'height': '95vh'})
