@@ -5,6 +5,7 @@ import dash_daq as daq
 from dash.dependencies import Input, Output
 from LagrangePoints import LagPlot, variable_setup, calculate_LagPoints_coordinates
 from getLayout import getMainLayout, getButtonLayout
+from about import getText
 
 app = dash.Dash(__name__)
 server = app.server
@@ -126,7 +127,12 @@ footer = html.Footer([
 app.layout = html.Div([
     html.Div([*getButtonLayout(), graph], className="nine columns"),
     html.Div(getMainLayout(distance_table), className="three columns"),
-    footer
+    html.Div([
+        html.Hr(),
+        html.Hr(),
+        html.Hr(),
+        dcc.Markdown(getText())
+    ], className="twelve columns")
 ])
 
 if __name__ == '__main__':

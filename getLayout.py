@@ -7,6 +7,7 @@ def getMainLayout(distance_table):
 
     return [
         html.Hr(),
+        html.P("Takes some time to switch..."),
         html.Tbody([
         html.Tr([
             html.Td(html.H6("2D")),
